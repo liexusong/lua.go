@@ -57,6 +57,7 @@ func TestExpBinOp(t *testing.T) {
 	testExp2(t, `((((a + b))))`, `(a + b)`)
 	testExp2(t, `((((a))))`, `(a)`)
 	testExp2(t, `1 + 2 + 3`, `6`)
+	//testExp2(t, `2.0 ^ -2`, `0.25`)
 	//testExp2(t, `2 ^ 2 ^ 3`, `256`)
 	//testExp2(t, `2 ^ (2 ^ 3)`, `256`)
 	//testExp2(t, `(2 ^ 2) ^ 3`, `64`)
