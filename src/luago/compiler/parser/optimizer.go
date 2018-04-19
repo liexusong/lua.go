@@ -6,24 +6,23 @@ import . "luago/compiler/ast"
 import . "luago/compiler/lexer"
 
 func optimizeLogicalOr(exp *BinopExp) Exp {
-	if isFalse(exp.Exp1) {
-		return exp.Exp2
-	} else if isFalse(exp.Exp2) {
-		return exp.Exp1
-	} else {
-		return exp
+	if isTrue(exp.Exp1) {
+		return exp.Exp1 // true or x => true
 	}
+	if isFalse(exp.Exp1) {
+		return exp.Exp2 // false or x => x
+	}
+	return exp
 }
 
-// todo: rename `last`
-func optimizeLogicalAnd(exp *BinopExp, last bool) Exp {
+func optimizeLogicalAnd(exp *BinopExp) Exp {
 	if isTrue(exp.Exp1) {
-		return exp.Exp2
-	} else if !last && isTrue(exp.Exp2) {
-		return exp.Exp1
-	} else {
-		return exp
+		return exp.Exp2 // true and x => x
+	} 
+	if isFalse(exp.Exp1) {
+		return exp.Exp1 // false and x => false
 	}
+	return exp
 }
 
 func optimizeBitwiseBinaryOp(exp *BinopExp) Exp {
