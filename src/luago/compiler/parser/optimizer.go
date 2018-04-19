@@ -9,19 +9,19 @@ func optimizeLogicalOr(exp *BinopExp) Exp {
 	if isTrue(exp.Exp1) {
 		return exp.Exp1 // true or x => true
 	}
-	if isFalse(exp.Exp1) {
+	if isFalse(exp.Exp1) && !isVarargOrFuncCall(exp.Exp2) {
 		return exp.Exp2 // false or x => x
 	}
 	return exp
 }
 
 func optimizeLogicalAnd(exp *BinopExp) Exp {
-	if isTrue(exp.Exp1) {
-		return exp.Exp2 // true and x => x
-	} 
 	if isFalse(exp.Exp1) {
 		return exp.Exp1 // false and x => false
 	}
+	if isTrue(exp.Exp1) && !isVarargOrFuncCall(exp.Exp2) {
+		return exp.Exp2 // true and x => x
+	} 
 	return exp
 }
 
@@ -171,6 +171,15 @@ func isTrue(exp Exp) bool {
 	default:
 		return false
 	}
+}
+
+// todo
+func isVarargOrFuncCall(exp Exp) bool {
+	switch exp.(type) {
+	case *VarargExp, *FuncCallExp:
+		return true
+	}
+	return false
 }
 
 func castToInt(exp Exp) (int64, bool) {
